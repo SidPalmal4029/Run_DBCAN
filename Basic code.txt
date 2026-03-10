@@ -1,8 +1,65 @@
-For the original documentation: https://run-dbcan.readthedocs.io/en/latest/user_guide/CGC_information_generation.html
+For the original documentation:
+https://run-dbcan.readthedocs.io/en/latest/user_guide/CGC_information_generation.html
 
 
+INPUT VARIABLES
+GENOME_FASTA=<INPUT_GENOME.fasta>
+OUTPUT_DIR=<OUTPUT_DIRECTORY>
+DB_DIR=$CONDA_PREFIX/dbcan_DB
+THREADS=<NUMBER_OF_THREADS>
 
 
+1. CAZyme Annotation
+
+run_dbcan CAZyme_annotation \
+--input_raw_data $GENOME_FASTA \
+--output_dir $OUTPUT_DIR \
+--db_dir $DB_DIR \
+--mode prok \
+--run_signalp \
+--threads $THREADS \
+--verbose
 
 
-run_dbcan gff_process --db_dir $CONDA_PREFIX/dbcan_DB --output_dir <Directory of the Cazyme run> --input_gff <Gff file from the previous annotation output> --gff_type prodigal
+2. GFF Processing
+
+run_dbcan gff_process \
+--db_dir $DB_DIR \
+--output_dir $OUTPUT_DIR \
+--input_gff $OUTPUT_DIR/uniInput.gff \
+--gff_type prodigal \
+--threads $THREADS \
+--verbose
+
+
+3. CGC Finder (default mode)
+
+run_dbcan cgc_finder \
+--output_dir $OUTPUT_DIR \
+--verbose
+
+
+4. Pfam Null Gene Annotation
+
+run_dbcan Pfam_null_cgc \
+--output_dir $OUTPUT_DIR \
+--db_dir $DB_DIR \
+--threads $THREADS \
+--run_pfam \
+--verbose
+
+
+5. CGC Substrate Prediction
+
+run_dbcan substrate_prediction \
+--input_raw_data $GENOME_FASTA \
+--mode prok \
+--output_dir $OUTPUT_DIR \
+--db_dir $DB_DIR \
+--verbose
+
+
+6. CGC Visualization (Circle Plot)
+
+run_dbcan cgc_circle_plot \
+--output_dir $OUTPUT_DIR
