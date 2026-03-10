@@ -1,0 +1,8 @@
+
+
+
+
+
+
+
+run_dbcan gff_process --db_dir $CONDA_PREFIX/dbcan_DB --output_dir <Directory of the Cazyme run> --input_gff <Gff file from the previous annotation output> --gff_type prodigal
